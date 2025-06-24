@@ -1,0 +1,23 @@
+relationship e38fbfbf-1f44-4405-8366-f73276c5752d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: customer_profile_dataset.date_of_birth
+	toColumn: LocalDateTable_da6b6e1b-6b9a-44cb-80e0-03fa146f6bc9.Date
+
+relationship fa449908-4a1c-4fbd-aa26-597854104c91
+	joinOnDateBehavior: datePartOnly
+	fromColumn: customer_profile_dataset.signup_date
+	toColumn: LocalDateTable_e6dd2c9a-f768-4952-b45b-243d90af70ca.Date
+
+relationship AutoDetected_6ba8de40-1444-4c16-8d4a-93611cc07b3a
+	fromColumn: purchase_history_dataset.product_id
+	toColumn: products_dataset.product_id
+
+relationship ef61416f-186d-0656-f41c-d5a7266901ac
+	fromColumn: purchase_history_dataset.customer_id
+	toColumn: customer_profile_dataset.customer_id
+
+relationship 67258270-4c66-4a6a-b938-3f9f9b7ee360
+	joinOnDateBehavior: datePartOnly
+	fromColumn: purchase_history_dataset.purchase_date
+	toColumn: LocalDateTable_552ef7a8-684a-4133-81cb-707913e4dc52.Date
+

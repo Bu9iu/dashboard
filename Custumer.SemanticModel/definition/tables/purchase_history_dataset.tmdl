@@ -1,0 +1,75 @@
+table purchase_history_dataset
+	lineageTag: e3cd7ead-e42d-431d-9f06-176c78501ee1
+
+	column purchase_id
+		dataType: string
+		lineageTag: a9b586fe-1dbc-4625-8b61-857cc6f776e3
+		summarizeBy: none
+		sourceColumn: purchase_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: ac5bbe11-17bf-49b7-ba3b-2942dcd932a7
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: string
+		lineageTag: 3a3e5c50-eb75-4985-96c8-bd9514a685cb
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column purchase_date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: c1731b57-35b9-45ed-845c-462a920b770a
+		summarizeBy: none
+		sourceColumn: purchase_date
+
+		variation Variation
+			isDefault
+			relationship: 67258270-4c66-4a6a-b938-3f9f9b7ee360
+			defaultHierarchy: LocalDateTable_552ef7a8-684a-4133-81cb-707913e4dc52.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 25e12f19-ffb8-45e3-ba3c-6be689279551
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_amount
+		dataType: double
+		lineageTag: 438ebba3-ff5e-4855-94c9-7f219d23fecc
+		summarizeBy: sum
+		sourceColumn: total_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition purchase_history_dataset = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("D:\Workspace\Dashboard\dashboard\dados\purchase_history_dataset.csv"),[Delimiter=",", Columns=6, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado com Localidade" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos", {{"total_amount", type number}}, "en-US"),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Tipo Alterado com Localidade",{{"quantity", Int64.Type}, {"purchase_date", type datetime}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

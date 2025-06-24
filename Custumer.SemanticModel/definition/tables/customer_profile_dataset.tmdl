@@ -1,0 +1,136 @@
+table customer_profile_dataset
+	lineageTag: 182040d8-aa99-41da-aa44-6a5fd62cdcb7
+
+	column customer_id
+		dataType: string
+		lineageTag: e1ae8915-d4a1-43ca-8fb8-23218d5ea161
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_name
+		dataType: string
+		lineageTag: 8595df34-769c-432d-88d6-e9d9b3c83de1
+		summarizeBy: none
+		sourceColumn: first_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_name
+		dataType: string
+		lineageTag: 8bdfaa97-408b-4156-b5ee-23979fa3bf7b
+		summarizeBy: none
+		sourceColumn: last_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		lineageTag: 147a9bdc-6148-42fd-8911-aa5eec22a12c
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_of_birth
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bdf76c3d-e20d-41bf-b9ca-36eb2389cebb
+		summarizeBy: none
+		sourceColumn: date_of_birth
+
+		variation Variation
+			isDefault
+			relationship: e38fbfbf-1f44-4405-8366-f73276c5752d
+			defaultHierarchy: LocalDateTable_da6b6e1b-6b9a-44cb-80e0-03fa146f6bc9.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: 93e31437-ebe1-4f9a-ba64-b43b085d0a10
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	column phone_number
+		dataType: string
+		lineageTag: 0df5a2b1-9cc2-4708-8110-af5ccceb2f68
+		summarizeBy: none
+		sourceColumn: phone_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column signup_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: dc4e9e35-4de2-4756-adea-1e5fd3696b43
+		summarizeBy: none
+		sourceColumn: signup_date
+
+		variation Variation
+			isDefault
+			relationship: fa449908-4a1c-4fbd-aa26-597854104c91
+			defaultHierarchy: LocalDateTable_e6dd2c9a-f768-4952-b45b-243d90af70ca.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column address
+		dataType: string
+		lineageTag: 58a0eb96-1160-497a-be2f-dbcd9aadfcca
+		summarizeBy: none
+		sourceColumn: address
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: 2b0c5663-452a-4a88-b341-0fc5b576f229
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: c2c366da-5962-4003-aa0f-60095d3228f1
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column zip_code
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e7de43f-4a3e-4005-b570-dda52a5bf868
+		summarizeBy: sum
+		sourceColumn: zip_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer
+		dataType: string
+		lineageTag: 13eef692-bba0-4707-8236-d55731022089
+		summarizeBy: none
+		sourceColumn: customer
+
+		annotation SummarizationSetBy = Automatic
+
+	partition customer_profile_dataset = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("D:\Workspace\Dashboard\dashboard\dados\customer_profile_dataset.csv"),[Delimiter=",", Columns=12, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"customer_id", Int64.Type}, {"first_name", type text}, {"last_name", type text}, {"gender", type text}, {"date_of_birth", type datetime}, {"email", type text}, {"phone_number", type text}, {"signup_date", type datetime}, {"address", type text}, {"city", type text}, {"state", type text}, {"zip_code", Int64.Type}}),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Tipo Alterado",{{"customer_id", type text}}),
+				    #"Coluna Mesclada Inserida" = Table.AddColumn(#"Tipo Alterado1", "customer", each Text.Combine({[first_name], [last_name]}, " "), type text)
+				in
+				    #"Coluna Mesclada Inserida"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

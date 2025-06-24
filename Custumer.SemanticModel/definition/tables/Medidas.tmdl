@@ -1,0 +1,47 @@
+table Medidas
+	lineageTag: 30332c02-2f7b-43a4-9d21-8874a51a14fe
+
+	measure 'Quantidade Vendida' = SUM(purchase_history_dataset[quantity])
+		formatString: 0
+		lineageTag: a8772584-7275-4bf2-a3bf-f4d1d54269a5
+
+	measure 'Total Vendido' = SUM(purchase_history_dataset[total_amount])
+		formatString: #,0.00
+		lineageTag: 72441288-bc40-4401-a3d4-c932c2828f8b
+
+	measure 'Ticket Médio Venda' = AVERAGE(purchase_history_dataset[total_amount])
+		lineageTag: e6892cd6-f3ac-4c4c-8c6c-0641a53745e5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Quantidade de Clientes' = DISTINCTCOUNT(customer_profile_dataset[customer_id])
+		formatString: 0
+		lineageTag: 5d60f5f3-b453-4a92-b1f5-94aa1dc90c87
+
+	measure 'Gasto Médio por Cliente' = DIVIDE([Total Vendido],[Quantidade de Clientes])
+		lineageTag: b19a5f68-74c1-4ff5-a040-e0031e8f27ad
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Quantidade de Atendimentos' = DISTINCTCOUNT(purchase_history_dataset[purchase_id])
+		formatString: 0
+		lineageTag: f5ee4829-f351-44f9-8a05-585603c823b4
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: 067ad4f3-68e6-4dd5-9ff5-919b33db94b0
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 163cc59bd841489ab6e10971e62ef3c9
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+
